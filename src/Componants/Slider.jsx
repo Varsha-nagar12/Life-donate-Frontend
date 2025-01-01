@@ -1,5 +1,8 @@
+import { useEffect } from "react"
+
 export default function Slider()
 {
+    useEffect(()=>window.headerCarousel(),[])
     return <>
         <div className="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div className="container">

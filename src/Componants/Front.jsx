@@ -1,5 +1,8 @@
+import { useEffect } from "react"
+
 export default function Front()
 {
+    useEffect (()=>window.frontCarousel(),[])
     return <>
          <div className="container-fluid p-0 mb-5">
         <div className="owl-carousel header-carousel position-relative">

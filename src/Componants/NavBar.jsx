@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function NavBar()
 {
     return <>
@@ -17,20 +19,14 @@ export default function NavBar()
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse">
             <div className="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.html" className="nav-item nav-link active">Home</a>
-                <a href="about.html" className="nav-item nav-link">About</a>
-                {/* <a href="courses.html" className="nav-item nav-link">Courses</a> */}
-                {/* <div className="nav-item dropdown">
-                    <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div className="dropdown-menu fade-down m-0">
-                        <a href="team.html" className="dropdown-item">Our Team</a>
-                        <a href="testimonial.html" className="dropdown-item">Testimonial</a>
-                        <a href="404.html" className="dropdown-item">404 Page</a>
-                    </div>
-                </div> */}
-                <a href="contact.html" className="nav-item nav-link">Contact</a>
+                <Link to="/"  className="nav-item nav-link active">Home</Link>
+                <Link to="/about" className="nav-item nav-link">About</Link>
+                <Link to="/contact" className="nav-item nav-link">Contact</Link>
             </div>
-            <a href="" className="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i className="fa fa-arrow-right ms-3"></i></a>
+            <Link href="/register" className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"> Register</Link>
+            &nbsp;
+            <Link href="/login" className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"> Login </Link>
+            
         </div>
     </nav>
     </>
