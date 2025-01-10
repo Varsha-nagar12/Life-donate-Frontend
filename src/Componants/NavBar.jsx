@@ -23,9 +23,9 @@ export default function NavBar()
                 <Link to="/about" className="nav-item nav-link">About</Link>
                 <Link to="/contact" className="nav-item nav-link">Contact</Link>
             </div>
-            <Link href="/register" className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"> Register</Link>
+            <Link to="/register" className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"> Register</Link>
             &nbsp;
-            <Link href="/login" className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"> Login </Link>
+            <Link to="/login" className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"> Login </Link>
             
         </div>
     </nav>
