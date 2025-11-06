@@ -32,7 +32,7 @@ export default function Register() {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         if (result.status) {
          toast.success(result.msg);
           event.target.reset(); 
@@ -159,3 +159,6 @@ export default function Register() {
     </>
   );
 }
+
+
+

@@ -252,105 +252,226 @@
 
 
 
-import { useRef } from "react";
-import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
-import { setData } from "./reduxconfig/UserSlice";
-import { useDispatch } from "react-redux";
+// import { useRef } from "react";
+// import toast from "react-hot-toast";
+// import { Link, useNavigate } from "react-router-dom";
+// import { setData } from "./reduxconfig/UserSlice";
+// import { useDispatch } from "react-redux";
 
-export default function Login()
-{
-  const dispatch = useDispatch
+// export default function Login()
+// {
+//   const dispatch = useDispatch
+//   const navigate = useNavigate();
+
+//   const mailRef = useRef();
+//   const passRef = useRef();
+
+//   const login = (event) => {
+//     event.preventDefault();
+//     const data = {
+//       email: mailRef.current.value,
+//       password: passRef.current.value,
+//     };
+
+//     fetch("http://localhost:8989/noauth/login", {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(data),
+//     })
+//       .then((res) => res.json())
+//       .then((result) => {
+//         if (result.status) {
+//           event.target.reset();
+//           toast.success(result.msg);
+//           dispatch(setData(result.data))
+//           // navigate(`/${result.data.role}`);
+//           navigate("/donor/welcome");
+//         } else {
+//           toast.error(result.msg);
+//         }
+//       });
+//   };
+
+
+
+//   return (
+    
+//     <>
+//       <div className="container-xxl py-5">
+//         <div className="container">
+//           <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+//             <h6 className="section-title bg-white text-center text-primary px-3">Welcome Back</h6>
+//             <h1 className="mb-5">Login to Your Account</h1>
+//             <p className="mb-4">
+//               Access your account to schedule donations, find resources, or connect with donors.
+//             </p>
+//           </div>
+//           <div className="row justify-content-center">
+//             <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+//               <form onSubmit={login}>
+//                 <div className="row g-3">
+//                   <div className="col-12">
+//                     <div className="form-floating">
+//                     <input type="email" className="form-control border-0 shadow-sm" id="email" placeholder="Email"
+//                       ref={mailRef}  required />
+//                       <label htmlFor="email">Email</label>
+//                     </div>
+//                   </div>
+//                   <div className="col-12">
+//                     <div className="form-floating">
+//                       <input
+//                         type="password"
+//                         className="form-control border-0 shadow-sm"
+//                         placeholder="Password"
+//                         ref={passRef}
+//                         required  />
+//                       <label htmlFor="password">Password</label>
+//                     </div>
+//                     {/* {errorMessage && (
+//                       <div className="text-danger mt-2">{errorMessage}</div>
+//                     )} */}
+//                   </div>
+//                   <div className="col-12">
+//         <button className="btn btn-primary w-100 py-3" type="submit">Login</button>
+
+//                   </div>
+//                 </div>
+//               </form>
+//               <p className="text-center mt-3">
+//                 Don't have an account?{" "}
+//                 <a href="/register" className="text-primary">
+//                   Register
+//                 </a>
+//               </p>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </>
+
+
+//   )
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import { setData } from "./reduxconfig/UserSlice";
+
+export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const mailRef = useRef();
   const passRef = useRef();
 
-  const login = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    const data = {
-      email: mailRef.current.value,
-      password: passRef.current.value,
-    };
 
-    fetch("http://localhost:8989/noauth/login", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.status) {
-          event.target.reset();
-          toast.success(result.msg);
-          dispatch(setData(result.data))
-          // navigate(`/${result.data.role}`);
-          navigate("/donor/welcome");
-        } else {
-          toast.error(result.msg);
-        }
+    const email = mailRef.current.value.trim();
+    const password = passRef.current.value.trim();
+
+    if (!email || !password) {
+      toast.error("Please fill all fields!");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8989"}/noauth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
+
+      const result = await response.json();
+
+      if (result.status) {
+        toast.success(result.msg || "Login successful!");
+        dispatch(setData(result.data));
+        event.target.reset();
+
+        // Navigate based on user role
+        navigate(result.data.role ? `/${result.data.role}` : "/donor/welcome");
+      } else {
+        toast.error(result.msg || "Invalid credentials!");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Something went wrong. Please try again later.");
+    }
   };
 
-
-
   return (
-    
-    <>
-      <div className="container-xxl py-5">
-        <div className="container">
-          <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 className="section-title bg-white text-center text-primary px-3">Welcome Back</h6>
-            <h1 className="mb-5">Login to Your Account</h1>
-            <p className="mb-4">
-              Access your account to schedule donations, find resources, or connect with donors.
-            </p>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-              <form onSubmit={login}>
-                <div className="row g-3">
-                  <div className="col-12">
-                    <div className="form-floating">
-                    <input type="email" className="form-control border-0 shadow-sm" id="email" placeholder="Email"
-                      ref={mailRef}  required />
-                      <label htmlFor="email">Email</label>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="form-floating">
-                      <input
-                        type="password"
-                        className="form-control border-0 shadow-sm"
-                        placeholder="Password"
-                        ref={passRef}
-                        required  />
-                      <label htmlFor="password">Password</label>
-                    </div>
-                    {/* {errorMessage && (
-                      <div className="text-danger mt-2">{errorMessage}</div>
-                    )} */}
-                  </div>
-                  <div className="col-12">
-        <button className="btn btn-primary w-100 py-3" type="submit">Login</button>
+    <section className="container-xxl py-5">
+      <div className="container">
+        <div className="text-center mb-5">
+          <h6 className="section-title bg-white text-center text-primary px-3">
+            Welcome Back
+          </h6>
+          <h1 className="mb-3">Login to Your Account</h1>
+          <p className="text-muted">
+            Access your account to schedule donations, find resources, or connect with donors.
+          </p>
+        </div>
 
-                  </div>
+        <div className="row justify-content-center">
+          <div className="col-lg-6">
+            <div className="card border-0 shadow-lg p-4 rounded-4">
+              <form onSubmit={handleLogin} className="wow fadeInUp" data-wow-delay="0.3s">
+                <div className="mb-4">
+                  <label htmlFor="email" className="form-label fw-semibold">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="form-control form-control-lg border-0 shadow-sm"
+                    placeholder="Enter your email"
+                    ref={mailRef}
+                    required
+                  />
                 </div>
+
+                <div className="mb-4">
+                  <label htmlFor="password" className="form-label fw-semibold">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    className="form-control form-control-lg border-0 shadow-sm"
+                    placeholder="Enter your password"
+                    ref={passRef}
+                    required
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-primary w-100 py-3">
+                  Login
+                </button>
+
+                <p className="text-center mt-3 mb-0">
+                  Don’t have an account?{" "}
+                  <Link to="/register" className="text-primary fw-semibold text-decoration-none">
+                    Register
+                  </Link>
+                </p>
               </form>
-              <p className="text-center mt-3">
-                Don't have an account?{" "}
-                <a href="/register" className="text-primary">
-                  Register
-                </a>
-              </p>
             </div>
           </div>
         </div>
       </div>
-    </>
-
-
-  )
+    </section>
+  );
 }
